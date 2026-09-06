@@ -7,6 +7,7 @@
 ### 你可以用它做什么
 
 - 添加、编辑、删除股票持仓
+- 点击某个持仓进入详情页，然后加仓或减仓
 - 查看总市值、总成本、浮动盈亏和收益率
 - 搜索持仓
 - 按市值、盈亏或代码排序
@@ -91,6 +92,25 @@ https://your-site.example.com/
 5. 再次从主屏幕打开“持仓”。
 6. 确认页面能打开，刚才的数据仍然存在。
 
+### 持仓和加减仓
+
+新增第一笔持仓：
+
+1. 打开 App。
+2. 点击“新增”。
+3. 填写代码、名称、数量、成本价、现价和货币。
+4. 点击“保存持仓”。
+
+加仓或减仓：
+
+1. 回到“持仓”页。
+2. 点击某一行持仓。
+3. 在底部详情页选择“加仓”或“减仓”。
+4. 输入成交数量和成交价。
+5. 点击确认。
+
+加仓会按新买入金额重新计算平均成本；减仓会减少数量，并保留原平均成本。成交价会同步更新为当前现价。
+
 ### 备份和恢复
 
 备份：
@@ -136,6 +156,7 @@ This is an offline-first personal stock portfolio PWA. It does not require a bac
 ### What You Can Do
 
 - Add, edit, and delete holdings
+- Tap a holding to open details, then add or reduce the position
 - View total market value, total cost, unrealized profit/loss, and return rate
 - Search holdings
 - Sort by market value, profit/loss, or symbol
@@ -219,6 +240,25 @@ Recommended offline test:
 4. Turn on Airplane Mode.
 5. Open the app from the Home Screen again.
 6. Confirm that the page opens and your data is still there.
+
+### Positions and Trades
+
+Add your first position:
+
+1. Open the app.
+2. Tap the New tab.
+3. Enter symbol, name, quantity, average cost, current price, and currency.
+4. Tap Save Holding.
+
+Add or reduce a position:
+
+1. Go back to the Positions tab.
+2. Tap a holding row.
+3. Choose Add or Reduce in the bottom detail sheet.
+4. Enter trade quantity and trade price.
+5. Tap confirm.
+
+Adding shares recalculates the average cost based on the new purchase. Reducing shares lowers the quantity and keeps the original average cost. The trade price also updates the current price.
 
 ### Backup and Restore
 
