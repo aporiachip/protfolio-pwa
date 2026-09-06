@@ -65,9 +65,10 @@
 
         <div class="table-head" aria-hidden="true">
           <span>合约</span>
-          <span>数量</span>
-          <span>市值</span>
-          <span>盈亏</span>
+          <span>股数</span>
+          <span>成本</span>
+          <span>收益率</span>
+          <span>仓位</span>
         </div>
         <div class="positions-list" id="holdingsList" aria-live="polite"></div>
       </section>
@@ -138,11 +139,11 @@
             <strong id="detailShares">0</strong>
           </div>
           <div>
-            <span class="label">市值</span>
+            <span class="label">成本</span>
             <strong id="detailValue">¥0.00</strong>
           </div>
           <div>
-            <span class="label">盈亏</span>
+            <span class="label">收益 / 仓位</span>
             <strong id="detailPnl">¥0.00</strong>
           </div>
         </div>
@@ -187,8 +188,9 @@
           <small class="holding-name"></small>
         </span>
         <span class="holding-shares"></span>
-        <span class="market-value"></span>
-        <span class="pnl"></span>
+        <span class="holding-cost"></span>
+        <span class="holding-return"></span>
+        <span class="holding-weight"></span>
       </button>
     </template>
 

@@ -196,8 +196,8 @@ select:focus {
 .table-head,
 .position-row {
   display: grid;
-  grid-template-columns: minmax(96px, 1.25fr) 0.72fr 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: minmax(82px, 1.15fr) 0.68fr 1fr 0.82fr 0.72fr;
+  gap: 6px;
   align-items: center;
 }
 
@@ -255,6 +255,15 @@ select:focus {
 .position-row small {
   color: var(--muted);
   font-size: 11px;
+}
+
+.holding-cost,
+.holding-return,
+.holding-weight,
+.holding-shares {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ticket-panel,
@@ -521,13 +530,13 @@ button,
 
   .table-head,
   .position-row {
-    grid-template-columns: minmax(82px, 1.1fr) 0.62fr 0.94fr 0.94fr;
-    gap: 6px;
+    grid-template-columns: minmax(72px, 1.08fr) 0.6fr 0.92fr 0.78fr 0.66fr;
+    gap: 4px;
   }
 
   .table-head,
   .position-row {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .form-row,

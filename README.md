@@ -8,6 +8,7 @@
 
 - 添加、编辑、删除股票持仓
 - 点击某个持仓进入详情页，然后加仓或减仓
+- 每个合约显示股数、成本、收益率和仓位占比
 - 查看总市值、总成本、浮动盈亏和收益率
 - 搜索持仓
 - 按市值、盈亏或代码排序
@@ -159,6 +160,7 @@ This is an offline-first personal stock portfolio PWA. It does not require a bac
 
 - Add, edit, and delete holdings
 - Tap a holding to open details, then add or reduce the position
+- Each contract shows shares, cost, return rate, and portfolio weight
 - View total market value, total cost, unrealized profit/loss, and return rate
 - Search holdings
 - Sort by market value, profit/loss, or symbol

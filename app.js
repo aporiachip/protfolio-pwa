@@ -148,6 +148,9 @@ function renderSummary() {
 function renderHoldings() {
   els.holdingsList.replaceChildren();
   const holdings = visibleHoldings();
+  const totalMarketValue = state.holdings.reduce((sum, holding) => {
+    return sum + calcHolding(holding).marketValue;
+  }, 0);
   if (!holdings.length) {
     const empty = document.createElement("div");
     empty.className = "empty-state";
@@ -163,9 +166,10 @@ function renderHoldings() {
     node.querySelector(".holding-symbol").textContent = holding.symbol;
     node.querySelector(".holding-name").textContent = "USD";
     node.querySelector(".holding-shares").textContent = qty(holding.shares);
-    node.querySelector(".market-value").textContent = money(calc.marketValue, holding.currency);
-    node.querySelector(".pnl").textContent = money(calc.pnl, holding.currency);
-    node.querySelector(".pnl").classList.add(calc.pnl >= 0 ? "gain" : "loss");
+    node.querySelector(".holding-cost").textContent = money(calc.costBasis, holding.currency);
+    node.querySelector(".holding-return").textContent = percent(calc.returnRate);
+    node.querySelector(".holding-weight").textContent = percent(totalMarketValue > 0 ? (calc.marketValue / totalMarketValue) * 100 : 0);
+    node.querySelector(".holding-return").classList.add(calc.pnl >= 0 ? "gain" : "loss");
     node.addEventListener("click", () => openDetail(holding.id));
     els.holdingsList.append(node);
   }
@@ -216,12 +220,14 @@ function renderDetail() {
   const holding = selectedHolding();
   if (!holding) return;
   const calc = calcHolding(holding);
+  const totalMarketValue = state.holdings.reduce((sum, item) => sum + calcHolding(item).marketValue, 0);
+  const positionWeight = totalMarketValue > 0 ? (calc.marketValue / totalMarketValue) * 100 : 0;
   els.detailSymbol.textContent = holding.symbol;
   els.detailName.textContent = "USD";
   els.detailPrice.textContent = money(holding.price, holding.currency);
   els.detailShares.textContent = qty(holding.shares);
-  els.detailValue.textContent = money(calc.marketValue, holding.currency);
-  els.detailPnl.textContent = `${money(calc.pnl, holding.currency)} / ${percent(calc.returnRate)}`;
+  els.detailValue.textContent = `成本 ${money(calc.costBasis, holding.currency)}`;
+  els.detailPnl.textContent = `${percent(calc.returnRate)} / ${percent(positionWeight)}`;
   els.detailPnl.classList.toggle("gain", calc.pnl >= 0);
   els.detailPnl.classList.toggle("loss", calc.pnl < 0);
   els.tradePrice.value = holding.price || "";
