@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#10231f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="持仓">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>个人股票持仓</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="assets/icon-512.png">
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">本地持仓</p>
+          <h1>个人股票持仓</h1>
+        </div>
+        <button class="icon-button" id="installButton" type="button" aria-label="安装到主屏幕" title="安装到主屏幕" hidden>
+          <span aria-hidden="true">↓</span>
+        </button>
+      </header>
+
+      <section class="summary" aria-label="持仓汇总">
+        <div class="summary-main">
+          <span class="label">总市值</span>
+          <strong id="totalValue">¥0.00</strong>
+          <small id="totalCost">成本 ¥0.00</small>
+        </div>
+        <div class="summary-grid">
+          <div>
+            <span class="label">浮动盈亏</span>
+            <strong id="totalPnL">¥0.00</strong>
+          </div>
+          <div>
+            <span class="label">收益率</span>
+            <strong id="returnRate">0.00%</strong>
+          </div>
+        </div>
+      </section>
+
+      <nav class="tabs" aria-label="页面">
+        <button class="tab active" type="button" data-view="holdings">持仓</button>
+        <button class="tab" type="button" data-view="settings">数据</button>
+      </nav>
+
+      <section class="view active" id="holdingsView">
+        <form class="entry-form" id="holdingForm">
+          <input type="hidden" id="holdingId">
+          <label>
+            代码
+            <input id="symbol" name="symbol" autocomplete="off" autocapitalize="characters" placeholder="AAPL / 600519" required>
+          </label>
+          <label>
+            名称
+            <input id="name" name="name" autocomplete="off" placeholder="Apple / 贵州茅台" required>
+          </label>
+          <div class="form-row">
+            <label>
+              数量
+              <input id="shares" name="shares" inputmode="decimal" type="number" min="0" step="0.0001" placeholder="100" required>
+            </label>
+            <label>
+              成本价
+              <input id="cost" name="cost" inputmode="decimal" type="number" min="0" step="0.0001" placeholder="10.00" required>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              现价
+              <input id="price" name="price" inputmode="decimal" type="number" min="0" step="0.0001" placeholder="12.00" required>
+            </label>
+            <label>
+              货币
+              <select id="currency" name="currency">
+                <option value="CNY">人民币</option>
+                <option value="USD">美元</option>
+                <option value="HKD">港币</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            备注
+            <input id="note" name="note" autocomplete="off" placeholder="账户、策略或买入理由">
+          </label>
+          <div class="form-actions">
+            <button class="secondary" id="resetButton" type="button">清空</button>
+            <button class="primary" type="submit">保存持仓</button>
+          </div>
+        </form>
+
+        <div class="toolbar">
+          <input id="searchInput" type="search" placeholder="搜索代码或名称" aria-label="搜索持仓">
+          <select id="sortSelect" aria-label="排序">
+            <option value="value">按市值</option>
+            <option value="pnl">按盈亏</option>
+            <option value="symbol">按代码</option>
+          </select>
+        </div>
+
+        <div class="holdings-list" id="holdingsList" aria-live="polite"></div>
+      </section>
+
+      <section class="view" id="settingsView">
+        <div class="data-panel">
+          <div>
+            <h2>本地数据</h2>
+            <p>数据只保存在当前浏览器。导出文件可用于备份或换机导入。</p>
+          </div>
+          <div class="data-actions">
+            <button class="secondary" id="exportButton" type="button">导出 JSON</button>
+            <label class="file-button">
+              导入 JSON
+              <input id="importInput" type="file" accept="application/json">
+            </label>
+            <button class="danger" id="clearAllButton" type="button">清除全部</button>
+          </div>
+          <p class="status-line" id="offlineStatus">正在检查离线能力...</p>
+        </div>
+      </section>
+    </main>
+
+    <template id="holdingTemplate">
+      <article class="holding-card">
+        <div class="holding-head">
+          <div>
+            <strong class="holding-symbol"></strong>
+            <span class="holding-name"></span>
+          </div>
+          <span class="currency-pill"></span>
+        </div>
+        <div class="holding-metrics">
+          <div>
+            <span class="label">市值</span>
+            <strong class="market-value"></strong>
+          </div>
+          <div>
+            <span class="label">盈亏</span>
+            <strong class="pnl"></strong>
+          </div>
+          <div>
+            <span class="label">收益率</span>
+            <strong class="return"></strong>
+          </div>
+        </div>
+        <p class="holding-detail"></p>
+        <p class="holding-note"></p>
+        <div class="card-actions">
+          <button class="secondary edit-button" type="button">编辑</button>
+          <button class="ghost delete-button" type="button">删除</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
