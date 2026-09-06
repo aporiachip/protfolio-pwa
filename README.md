@@ -98,8 +98,10 @@ https://your-site.example.com/
 
 1. 打开 App。
 2. 点击“新增”。
-3. 填写代码、名称、数量、成本价、现价和货币。
+3. 填写代码、数量和价格。
 4. 点击“保存持仓”。
+
+价格默认按美元记录，不需要额外选择货币。
 
 加仓或减仓：
 
@@ -247,8 +249,10 @@ Add your first position:
 
 1. Open the app.
 2. Tap the New tab.
-3. Enter symbol, name, quantity, average cost, current price, and currency.
+3. Enter symbol, quantity, and price.
 4. Tap Save Holding.
+
+Prices are recorded in USD by default. No currency selection is required.
 
 Add or reduce a position:
 

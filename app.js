@@ -12,12 +12,8 @@ const els = {
   form: document.querySelector("#holdingForm"),
   holdingId: document.querySelector("#holdingId"),
   symbol: document.querySelector("#symbol"),
-  name: document.querySelector("#name"),
   shares: document.querySelector("#shares"),
-  cost: document.querySelector("#cost"),
   price: document.querySelector("#price"),
-  currency: document.querySelector("#currency"),
-  note: document.querySelector("#note"),
   resetButton: document.querySelector("#resetButton"),
   searchInput: document.querySelector("#searchInput"),
   sortSelect: document.querySelector("#sortSelect"),
@@ -49,7 +45,6 @@ const els = {
   tradeSubmitButton: document.querySelector("#tradeSubmitButton"),
   quickEditForm: document.querySelector("#quickEditForm"),
   quickPrice: document.querySelector("#quickPrice"),
-  quickNote: document.querySelector("#quickNote"),
   historyList: document.querySelector("#historyList")
 };
 
@@ -66,11 +61,11 @@ function normalizeHolding(item) {
   return {
     id: item.id || crypto.randomUUID(),
     symbol: String(item.symbol || "").trim().toUpperCase(),
-    name: String(item.name || "").trim(),
+    name: String(item.name || item.symbol || "").trim().toUpperCase(),
     shares: parseNumber(item.shares),
-    cost: parseNumber(item.cost),
+    cost: parseNumber(item.cost || item.price),
     price: parseNumber(item.price),
-    currency: ["CNY", "USD", "HKD"].includes(item.currency) ? item.currency : "CNY",
+    currency: "USD",
     note: String(item.note || "").trim(),
     updatedAt: item.updatedAt || new Date().toISOString(),
     transactions: Array.isArray(item.transactions) ? item.transactions : []
@@ -81,7 +76,7 @@ function persist() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.holdings));
 }
 
-function money(value, currency = "CNY") {
+function money(value, currency = "USD") {
   return new Intl.NumberFormat("zh-CN", {
     style: "currency",
     currency,
@@ -112,9 +107,8 @@ function calcHolding(holding) {
   return { costBasis, marketValue, pnl, returnRate };
 }
 
-function summaryInCny() {
+function summaryInUsd() {
   return state.holdings.reduce((acc, holding) => {
-    if (holding.currency !== "CNY") return acc;
     const item = calcHolding(holding);
     acc.cost += item.costBasis;
     acc.value += item.marketValue;
@@ -128,7 +122,7 @@ function visibleHoldings() {
   return state.holdings
     .filter((holding) => {
       if (!query) return true;
-      return `${holding.symbol} ${holding.name}`.toLowerCase().includes(query);
+      return holding.symbol.toLowerCase().includes(query);
     })
     .sort((a, b) => {
       if (state.sort === "symbol") return a.symbol.localeCompare(b.symbol);
@@ -140,10 +134,10 @@ function visibleHoldings() {
 }
 
 function renderSummary() {
-  const summary = summaryInCny();
+  const summary = summaryInUsd();
   const rate = summary.cost > 0 ? (summary.pnl / summary.cost) * 100 : 0;
   els.totalValue.textContent = money(summary.value);
-  els.totalCost.textContent = `人民币成本 ${money(summary.cost)}`;
+  els.totalCost.textContent = `美元成本 ${money(summary.cost)}`;
   els.totalPnL.textContent = money(summary.pnl);
   els.returnRate.textContent = percent(rate);
   els.positionCount.textContent = String(state.holdings.length);
@@ -167,7 +161,7 @@ function renderHoldings() {
     const calc = calcHolding(holding);
     node.dataset.id = holding.id;
     node.querySelector(".holding-symbol").textContent = holding.symbol;
-    node.querySelector(".holding-name").textContent = holding.name;
+    node.querySelector(".holding-name").textContent = "USD";
     node.querySelector(".holding-shares").textContent = qty(holding.shares);
     node.querySelector(".market-value").textContent = money(calc.marketValue, holding.currency);
     node.querySelector(".pnl").textContent = money(calc.pnl, holding.currency);
@@ -195,7 +189,6 @@ function switchView(viewName) {
 function resetForm() {
   els.form.reset();
   els.holdingId.value = "";
-  els.currency.value = "CNY";
   els.symbol.focus();
 }
 
@@ -224,7 +217,7 @@ function renderDetail() {
   if (!holding) return;
   const calc = calcHolding(holding);
   els.detailSymbol.textContent = holding.symbol;
-  els.detailName.textContent = holding.name;
+  els.detailName.textContent = "USD";
   els.detailPrice.textContent = money(holding.price, holding.currency);
   els.detailShares.textContent = qty(holding.shares);
   els.detailValue.textContent = money(calc.marketValue, holding.currency);
@@ -233,7 +226,6 @@ function renderDetail() {
   els.detailPnl.classList.toggle("loss", calc.pnl < 0);
   els.tradePrice.value = holding.price || "";
   els.quickPrice.value = holding.price || "";
-  els.quickNote.value = holding.note || "";
   renderSideButtons();
   renderHistory(holding);
 }
@@ -271,7 +263,7 @@ function renderHistory(holding) {
 function deleteHolding(id) {
   const holding = state.holdings.find((item) => item.id === id);
   if (!holding) return;
-  const confirmed = confirm(`删除 ${holding.symbol} ${holding.name}？`);
+  const confirmed = confirm(`删除 ${holding.symbol}？`);
   if (!confirmed) return;
   state.holdings = state.holdings.filter((item) => item.id !== id);
   persist();
@@ -283,21 +275,25 @@ function saveFromForm(event) {
   event.preventDefault();
   const id = els.holdingId.value || crypto.randomUUID();
   const shares = parseNumber(els.shares.value);
-  const cost = parseNumber(els.cost.value);
+  const price = parseNumber(els.price.value);
+  if (!els.symbol.value.trim() || shares <= 0 || price <= 0) {
+    alert("请输入有效的代码、数量和价格。");
+    return;
+  }
   const holding = normalizeHolding({
     id,
     symbol: els.symbol.value,
-    name: els.name.value,
+    name: els.symbol.value,
     shares,
-    cost,
-    price: els.price.value,
-    currency: els.currency.value,
-    note: els.note.value,
+    cost: price,
+    price,
+    currency: "USD",
+    note: "",
     updatedAt: new Date().toISOString(),
     transactions: [{
       side: "buy",
       shares,
-      price: cost,
+      price,
       createdAt: new Date().toISOString()
     }]
   });
@@ -368,7 +364,6 @@ function quickEdit(event) {
   const holding = selectedHolding();
   if (!holding) return;
   holding.price = parseNumber(els.quickPrice.value);
-  holding.note = els.quickNote.value.trim();
   holding.updatedAt = new Date().toISOString();
   persist();
   render();
