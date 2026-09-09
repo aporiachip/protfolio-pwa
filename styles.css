@@ -168,6 +168,26 @@ h2 {
   margin-bottom: 8px;
 }
 
+.refresh-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 34px;
+  margin-bottom: 6px;
+}
+
+.refresh-row .status-line {
+  min-width: 0;
+}
+
+.refresh-row .status-line.success {
+  color: var(--gain);
+}
+
+.refresh-row .status-line.error {
+  color: var(--loss);
+}
+
 label {
   display: grid;
   gap: 6px;
@@ -196,7 +216,7 @@ select:focus {
 .table-head,
 .position-row {
   display: grid;
-  grid-template-columns: minmax(82px, 1.15fr) 0.68fr 1fr 0.82fr 0.72fr;
+  grid-template-columns: minmax(76px, 1.1fr) 0.58fr 0.92fr 0.92fr 0.76fr 0.66fr;
   gap: 6px;
   align-items: center;
 }
@@ -258,6 +278,7 @@ select:focus {
 }
 
 .holding-cost,
+.holding-price,
 .holding-return,
 .holding-weight,
 .holding-shares {
@@ -274,11 +295,99 @@ select:focus {
   border-radius: 8px;
 }
 
+.cash-panel {
+  margin-top: 12px;
+}
+
+.cash-panel .ticket-title strong {
+  color: var(--ink);
+}
+
+.cash-panel .status-line.success {
+  color: var(--gain);
+}
+
+.cash-panel .status-line.error {
+  color: var(--loss);
+}
+
 .form-row,
 .data-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+}
+
+.form-row.three-columns {
+  grid-template-columns: 1fr 1fr 0.72fr;
+}
+
+.symbol-search-row {
+  display: grid;
+  grid-template-columns: 1fr 78px;
+  gap: 8px;
+}
+
+.lookup-status {
+  min-height: 20px;
+}
+
+.lookup-status.success {
+  color: var(--gain);
+}
+
+.lookup-status.error {
+  color: var(--loss);
+}
+
+.quote-results {
+  display: grid;
+  gap: 1px;
+  margin-top: -6px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.quote-results[hidden] {
+  display: none;
+}
+
+.quote-result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 8px 10px;
+  border-radius: 0;
+  color: var(--ink);
+  background: var(--panel-2);
+  text-align: left;
+}
+
+.quote-result span,
+.quote-result strong,
+.quote-result small {
+  min-width: 0;
+}
+
+.quote-result strong,
+.quote-result small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quote-result small {
+  margin-top: 3px;
+  color: var(--muted);
+}
+
+.quote-result-price {
+  text-align: right;
 }
 
 button,
@@ -530,7 +639,7 @@ button,
 
   .table-head,
   .position-row {
-    grid-template-columns: minmax(72px, 1.08fr) 0.6fr 0.92fr 0.78fr 0.66fr;
+    grid-template-columns: minmax(64px, 1fr) 0.5fr 0.84fr 0.84fr 0.7fr 0.6fr;
     gap: 4px;
   }
 
@@ -542,5 +651,15 @@ button,
   .form-row,
   .data-actions {
     grid-template-columns: 1fr;
+  }
+
+  .form-row.three-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .refresh-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
   }
 }

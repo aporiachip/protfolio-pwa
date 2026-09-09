@@ -6,9 +6,10 @@
 
 ### 你可以用它做什么
 
+- 在线搜索并验证股票代码，自动获取最新价格后添加持仓
 - 添加、编辑、删除股票持仓
 - 点击某个持仓进入详情页，然后加仓或减仓
-- 每个合约显示股数、成本、收益率和仓位占比
+- 每个合约显示股数、最新价、成本、收益率和仓位占比
 - 查看总市值、总成本、浮动盈亏和收益率
 - 搜索持仓
 - 按市值、盈亏或代码排序
@@ -99,10 +100,12 @@ https://your-site.example.com/
 
 1. 打开 App。
 2. 点击“新增”。
-3. 填写代码、数量和价格。
-4. 点击“保存持仓”。
+3. 输入代码或公司名称（例如 `INTC`），点击“搜索”。
+4. 确认搜索到的股票和最新价格；如果输入的是精确代码，会自动选择。
+5. 填写数量和买入价。
+6. 点击“保存持仓”。
 
-价格默认按美元记录，不需要额外选择货币。
+应用会检查股票是否存在，并用行情中的币种记录价格。搜索和获取最新价格需要联网；已保存的持仓仍可离线查看。
 
 加仓或减仓：
 
@@ -146,9 +149,9 @@ https://your-site.example.com/
 
 不会。当前版本没有后端，也不会主动上传持仓数据。导出 JSON 时，文件由你自己保存和管理。
 
-**会自动更新股票价格吗？**
+**股票价格从哪里获取？**
 
-不会。当前版本没有接入行情接口，需要手动更新现价。
+新增持仓时会通过 Yahoo Finance 搜索股票并获取最新市场价格。保存后仍可在持仓详情中手动更新现价；当前版本不会在后台自动刷新全部持仓。
 
 ---
 
@@ -158,10 +161,12 @@ This is an offline-first personal stock portfolio PWA. It does not require a bac
 
 ### What You Can Do
 
+- Search and validate symbols online, then fetch the latest price before adding a holding
 - Add, edit, and delete holdings
 - Tap a holding to open details, then add or reduce the position
-- Each contract shows shares, cost, return rate, and portfolio weight
+- Each contract shows shares, latest price, cost, return rate, and portfolio weight
 - View total market value, total cost, unrealized profit/loss, and return rate
+- Track a USD cash position; purchases reduce cash, sales increase it, and negative cash is allowed
 - Search holdings
 - Sort by market value, profit/loss, or symbol
 - Export a JSON backup
@@ -251,10 +256,12 @@ Add your first position:
 
 1. Open the app.
 2. Tap the New tab.
-3. Enter symbol, quantity, and price.
-4. Tap Save Holding.
+3. Enter a symbol or company name (for example, `INTC`) and tap Search.
+4. Confirm the matched security and latest price. An exact symbol is selected automatically.
+5. Enter the quantity and purchase price.
+6. Tap Save Holding.
 
-Prices are recorded in USD by default. No currency selection is required.
+The app validates that the security exists and records the currency reported by the market-data service. Search and current-price lookup require a network connection; saved holdings remain available offline.
 
 Add or reduce a position:
 
@@ -264,7 +271,7 @@ Add or reduce a position:
 4. Enter trade quantity and trade price.
 5. Tap confirm.
 
-Adding shares recalculates the average cost based on the new purchase. Reducing shares lowers the quantity and keeps the original average cost. The trade price also updates the current price.
+Adding shares recalculates the average cost using the purchase amount plus commission. Reducing shares uses net sale proceeds to reduce the remaining total cost: `(old total cost - sold shares × sale price + commission) ÷ remaining shares`. Trade prices and commissions are recorded in history, while the current price continues to come from the latest market quote.
 
 ### Backup and Restore
 
@@ -298,6 +305,6 @@ No, not for desktop preview. For iPhone Home Screen installation and reliable of
 
 No. This version has no backend and does not upload your portfolio data. JSON exports are files that you manage yourself.
 
-**Does it update stock prices automatically?**
+**Where do stock prices come from?**
 
-No. This version does not connect to a market data API. Current prices are updated manually.
+When adding a holding, the app searches Yahoo Finance and retrieves the latest market price. You can still update the current price manually from the holding details. This version does not refresh every holding automatically in the background.
